@@ -1,0 +1,27 @@
+///<summary>
+///跨域设置
+///</summary>
+protected void Application_BeginRequest()
+{
+	//OPTIONS请求方法的主要作用:
+	//1.获取服务器支持的HTTP请求方法；也是黑客经常使用的方法。
+	//2.用来检查服务器的性能。如：AJAX进行跨域请求时的预检，需要向另外一个域名的资源发送一个HTTPOPTIONS 请求头，用以判断实际发送的情况；
+	if(Request.Headers.AllKeys.Contains("Origin")&& Request.HttpMethod =="OPTIONS")
+	{
+		//表示对输出的内容进行缓冲，执行page.Response.Flush（）时，会等所有内容缓冲完毕，将		内容发送到客户端。这样就不会出错，造成页面卡死状态，让用户无限制的等下去
+		Response.Flush();					
+	}
+}
+
+<!--跨域请求：三个配置信息-->
+<httpProtocol>
+      <customHeaders>
+	<!--响应类型(值为逗号分割的一个字符串，表明服务器支持的所有跨域请求的方法)-->
+        <add name="Access-Control-Allow-Methods" value="GET, POST, PUT, DELETE,OPTIONS" />
+	<!--响应头设置（Content-Type：只限于三个值Application···）-->
+        <add name="Access-Control-Allow-Headers" value="x-requested-with,content-type" />
+	<!--如果设置Access-Control-Allow-Origin:*,则允许所有域名的脚本访问该资源-->
+        <add name="Access-Control-Allow-Origin" value="*" />
+	<!--<add name="Access-Control_allow_Orgin" values="http://domain.com,http://domain2.com" /> 设置允许跨域访问的网址-->
+      </customHeaders>
+    </httpProtocol>

@@ -1,0 +1,43 @@
+//要引用
+@using PagedList.Mvc;
+@model PagedList.IPagedList<PageList.Models.ShuJu>
+
+每页:@Model.PageSize 条记录,共 @Model.PageCount 页,当前第 @Model.PageNumber 页
+
+       @Html.PagedListPager(Model, pageIndex => Url.Action("Index", new { pageIndex}))
+
+
+            new PagedListRenderOptions
+            {
+                LinkToFirstPageFormat="首页",
+                LinkToPreviousPageFormat="上一页",
+                LinkToNextPageFormat="下一页",
+                LinkToLastPageFormat="尾页",
+                MaximumPageNumbersToDisplay=5,
+                DisplayItemSliceAndTotal=false,
+            }
+
+
+//分页指令
+install-Package PagedList.mvc
+
+
+
+        /// <summary>
+        /// 参数必须有
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        public ActionResult Index(int pageIndex = 1)
+        {
+            //显示数据的条数
+            int pageSize = 10;
+            //获取数据
+            var list = new DalOpt().GetShuJu();
+            //获取数据总条数
+            var allCount = list.Count();
+            //进行分页操作
+            IPagedList<ShuJu> shuJu = list.ToPagedList(pageIndex, pageSize);
+            //将集合返回视图
+            return View(shuJu);
+        }
